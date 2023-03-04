@@ -10,14 +10,14 @@ CXXFLAGS = -Wall -Werror -ggdb -funroll-loops -DTERM=$(TERM)
 
 LDFLAGS = 
 
-BIN = trainers
-OBJS = trainers.o heap.o
+BIN = userInterface
+OBJS = userInterface.o heap.o
 
 all: $(BIN) etags
 
 $(BIN): $(OBJS)
 	@$(ECHO) Linking $@
-	@$(CC) $^ -o $@ $(LDFLAGS)
+	@$(CC) $^ -o $@ $(LDFLAGS) -lncurses
 
 -include $(OBJS:.o=.d)
 

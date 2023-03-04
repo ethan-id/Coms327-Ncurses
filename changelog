@@ -1,3 +1,11 @@
 3/4/23
-    11:32am-
+    11:32am-12:19pm
         Initialized git repo
+        Added Ncurses
+            Updated displayMap() to use ncurses
+            Added color
+        To-Do:
+            Handle user input commands
+            Pokemon battle screen
+            Allow swimmers to swim underneath/overtop roads
+            

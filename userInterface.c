@@ -4,7 +4,14 @@
 #include <string.h>
 #include <math.h>
 #include <unistd.h>
+#include <ncurses.h>
 #include "heap.h"
+
+#define GRASS_COLOR 123
+#define WATER_COLOR 234
+#define BOULDER_COLOR 456
+#define ROAD_COLOR 678
+#define TREE_COLOR 890
 
 const int INFINITY_T = 2147483640;
 const int NUM_VERTICES = 1680; // 21 * 80
@@ -458,16 +465,58 @@ void displayMap(terrainMap_t *terrainMap, int numTrainers, character_t *trainers
             charToPrint = terrainMap->terrain[i][j];
             for (k = 0; k < numTrainers; k++) {
                 if (i == trainers[k]->position.rowPos && j == trainers[k]->position.colPos && trainers[k]->npc != '@') {
-                    // charToPrint = trainers[k]->spawn;
                     charToPrint = trainers[k]->npc;
                 }
             }
             if(i == terrainMap->player.rowPos && j == terrainMap->player.colPos) {
                 charToPrint = '@';
             }
-            printf("%c", charToPrint);
+            switch(charToPrint) {
+                case '~' :
+                    attron(COLOR_PAIR(WATER_COLOR));
+                    break;
+                case '^' :
+                    attron(COLOR_PAIR(TREE_COLOR));
+                    break;
+                case '.' :
+                    attron(COLOR_PAIR(GRASS_COLOR));
+                    break;
+                case ':' :
+                    attron(COLOR_PAIR(GRASS_COLOR));
+                    break;
+                case '%' :
+                    attron(COLOR_PAIR(BOULDER_COLOR));
+                    break;
+                case '#' :
+                    attron(COLOR_PAIR(ROAD_COLOR));
+                    break;
+                default :
+                    break;
+            }
+            mvprintw(i, j, "%c", charToPrint);
+            switch(charToPrint) {
+                case '~' :
+                    attroff(COLOR_PAIR(WATER_COLOR));
+                    break;
+                case '^' :
+                    attroff(COLOR_PAIR(TREE_COLOR));
+                    break;
+                case '.' :
+                    attroff(COLOR_PAIR(GRASS_COLOR));
+                    break;
+                case ':' :
+                    attroff(COLOR_PAIR(GRASS_COLOR));
+                    break;
+                case '%' :
+                    attroff(COLOR_PAIR(BOULDER_COLOR));
+                    break;
+                case '#' :
+                    attroff(COLOR_PAIR(ROAD_COLOR));
+                    break;
+                default :
+                    break;
+            }
         }
-        printf("\n");
     }
 
     if (terrainMap->worldRow - 200 < 0) {
@@ -479,7 +528,7 @@ void displayMap(terrainMap_t *terrainMap, int numTrainers, character_t *trainers
         ew = 'W';
     }
 
-    printf("Coords: %d%c %d%c\n", (terrainMap->worldRow - 200) * northMult, ns, (terrainMap->worldCol - 200) * westMult, ew);
+    mvprintw(21, 0, "Coords: %d%c %d%c\n", (terrainMap->worldRow - 200) * northMult, ns, (terrainMap->worldCol - 200) * westMult, ew);
 }
 
 void findPosition(character_t *trainer, terrainMap_t *terrainMap, int numTrainers, position_t *positionsUsed[numTrainers]) {
@@ -700,6 +749,7 @@ void generateTrainers(terrainMap_t *terrainMap, int numTrainers) {
                 // printf("Moved Player\n");
                 usleep(250000);
                 displayMap(terrainMap, numTrainers, trainers);
+                getch();
                 // just adding the moveCost to a random position on the map to very inaccurately 'simulate' the player moving
                 moveCost = getMoveCost(terrainMap, (rand() % (16 - 3)) + 3, (rand() % (70 - 10)) + 10, trainers[i]);
                 if (moveCost < INFINITY_T) {
@@ -718,7 +768,7 @@ void generateTrainers(terrainMap_t *terrainMap, int numTrainers) {
                 }
                 heap_insert(&characterHeap, &trainers[i]->nextMoveTime, &trainers[i]->npc);
                 break;
-            case 'h' :=
+            case 'h' :
                 position_t hikerMove = findPath(terrainMap, trainers[i]->position.rowPos, trainers[i]->position.colPos, trainers[i]);
                 trainers[i]->position.rowPos = hikerMove.rowPos;
                 trainers[i]->position.colPos = hikerMove.colPos;
@@ -1051,8 +1101,18 @@ int main(int argc, char *argv[]) {
             numTrainers = atoi(argv[2]);
         }
     }
+
+    initscr();
+    start_color();
+    init_pair(GRASS_COLOR, COLOR_GREEN, COLOR_BLACK);
+    init_pair(WATER_COLOR, COLOR_BLUE, COLOR_BLACK);
+    init_pair(TREE_COLOR, COLOR_BLACK, COLOR_GREEN);
+    init_pair(BOULDER_COLOR, COLOR_CYAN, COLOR_BLACK);
+    init_pair(ROAD_COLOR, COLOR_YELLOW, COLOR_BLACK);
     
     world[currWorldRow][currWorldCol] = generateTerrain(&currWorldRow, &currWorldCol, 1, numTrainers);
+
+    endwin();
     
     // while (!quit) {
     //     printf("~: ");

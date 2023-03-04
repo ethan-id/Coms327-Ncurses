@@ -8,4 +8,12 @@
             Handle user input commands
             Pokemon battle screen
             Allow swimmers to swim underneath/overtop roads
+    12:20pm-12:27pm
+        Fixed swimmer movement
+            they can now swim 'under' bridges, displayed on top
+        To-Do:
+            Implement user actions/movement
+            Pokemon battle screen
+    12:27pm-
+
             

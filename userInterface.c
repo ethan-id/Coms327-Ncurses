@@ -493,7 +493,7 @@ void displayMap(terrainMap_t *terrainMap, int numTrainers, character_t *trainers
                 default :
                     break;
             }
-            mvprintw(i, j, "%c", charToPrint);
+            mvprintw(i + 1, j, "%c", charToPrint);
             switch(charToPrint) {
                 case '~' :
                     attroff(COLOR_PAIR(WATER_COLOR));
@@ -528,7 +528,7 @@ void displayMap(terrainMap_t *terrainMap, int numTrainers, character_t *trainers
         ew = 'W';
     }
 
-    mvprintw(21, 0, "Coords: %d%c %d%c\n", (terrainMap->worldRow - 200) * northMult, ns, (terrainMap->worldCol - 200) * westMult, ew);
+    mvprintw(22, 0, "Coords: %d%c %d%c\n", (terrainMap->worldRow - 200) * northMult, ns, (terrainMap->worldCol - 200) * westMult, ew);
 }
 
 void findPosition(character_t *trainer, terrainMap_t *terrainMap, int numTrainers, position_t *positionsUsed[numTrainers]) {
@@ -623,6 +623,8 @@ int getMoveCost(terrainMap_t *terrainMap, int row, int col, character_t *trainer
         case 'm' :
             switch(terrainMap->terrain[row][col]) {
                 case '~' :
+                    return 7;
+                case '#' :
                     return 7;
                 default :
                     return INFINITY_T;
@@ -982,7 +984,8 @@ void generateTrainers(terrainMap_t *terrainMap, int numTrainers) {
                 // if player is cardinally adjacent/on edge of water directly north, south, west, or east, move towards player
                 if (trainers[i]->direction == Left) {
                     if (positionNotOccupied(trainers[i]->position.rowPos, trainers[i]->position.colPos - 1, numTrainers, trainers)
-                    && terrainMap->terrain[trainers[i]->position.rowPos][trainers[i]->position.colPos - 1] == '~') {
+                    && (terrainMap->terrain[trainers[i]->position.rowPos][trainers[i]->position.colPos - 1] == '~'
+                    || terrainMap->terrain[trainers[i]->position.rowPos][trainers[i]->position.colPos - 1] == '#')) {
                         trainers[i]->position.colPos--;
                         moveCost = getMoveCost(terrainMap, trainers[i]->position.rowPos, trainers[i]->position.colPos - 1, trainers[i]);
                         if (moveCost < INFINITY_T) {
@@ -994,7 +997,8 @@ void generateTrainers(terrainMap_t *terrainMap, int numTrainers) {
                 }
                 if (trainers[i]->direction == Right) {
                     if (positionNotOccupied(trainers[i]->position.rowPos, trainers[i]->position.colPos + 1, numTrainers, trainers)
-                    && terrainMap->terrain[trainers[i]->position.rowPos][trainers[i]->position.colPos + 1] == '~') {
+                    && (terrainMap->terrain[trainers[i]->position.rowPos][trainers[i]->position.colPos + 1] == '~'
+                    || terrainMap->terrain[trainers[i]->position.rowPos][trainers[i]->position.colPos + 1] == '#')) {
                         trainers[i]->position.colPos++;
                         moveCost = getMoveCost(terrainMap, trainers[i]->position.rowPos, trainers[i]->position.colPos + 1, trainers[i]);
                         if (moveCost < INFINITY_T) {
@@ -1006,7 +1010,8 @@ void generateTrainers(terrainMap_t *terrainMap, int numTrainers) {
                 }
                 if (trainers[i]->direction == Down) {
                     if (positionNotOccupied(trainers[i]->position.rowPos + 1, trainers[i]->position.colPos, numTrainers, trainers)
-                    && terrainMap->terrain[trainers[i]->position.rowPos + 1][trainers[i]->position.colPos] == '~') {
+                    && (terrainMap->terrain[trainers[i]->position.rowPos + 1][trainers[i]->position.colPos] == '~'
+                    || terrainMap->terrain[trainers[i]->position.rowPos + 1][trainers[i]->position.colPos] == '#')) {
                         trainers[i]->position.rowPos++;
                         moveCost = getMoveCost(terrainMap, trainers[i]->position.rowPos + 1, trainers[i]->position.colPos, trainers[i]);
                         if (moveCost < INFINITY_T) {
@@ -1018,7 +1023,8 @@ void generateTrainers(terrainMap_t *terrainMap, int numTrainers) {
                 }
                 if (trainers[i]->direction == Up) {
                     if (positionNotOccupied(trainers[i]->position.rowPos - 1, trainers[i]->position.colPos, numTrainers, trainers)
-                    && terrainMap->terrain[trainers[i]->position.rowPos - 1][trainers[i]->position.colPos] == '~') {
+                    &&(terrainMap->terrain[trainers[i]->position.rowPos - 1][trainers[i]->position.colPos] == '~'
+                    || terrainMap->terrain[trainers[i]->position.rowPos - 1][trainers[i]->position.colPos] == '#')) {
                         trainers[i]->position.rowPos--;
                         moveCost = getMoveCost(terrainMap, trainers[i]->position.rowPos - 1, trainers[i]->position.colPos, trainers[i]);
                         if (moveCost < INFINITY_T) {

@@ -1005,6 +1005,7 @@ void generateTrainers(terrainMap_t *terrainMap, int numTrainers) {
                     case (32) :
                     case (46) :
                         mvprintw(0, 0, "Resting...                   ");
+                        moveCost = 0;
                         break;
                     case (62) :
                         mvprintw(0, 0, "Attempt to enter building    ");

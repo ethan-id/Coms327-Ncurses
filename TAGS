@@ -32,7 +32,7 @@ typedef struct heap 18,322
     heap_entry* table;23,655
 } heap;24,727
 
-userInterface.c,1852
+userInterface.c,1900
 #define GRASS_COLOR 10,155
 #define WATER_COLOR 11,179
 #define BOULDER_COLOR 12,203
@@ -54,46 +54,48 @@ typedef struct character 28,500
     char value[value30,541
     direction_t direction;31,561
     position_t position;32,588
-    long int nextMoveTime;33,613
-    char spawn;34,640
-} character_t;35,656
-typedef struct squares 37,672
-    int rowPos;38,697
-    int colPos;39,713
-    int cost;40,729
-    char terrain;41,743
-} squares_t;42,761
-typedef struct player 44,775
-    int rowPos;45,799
-    int colPos;46,815
-} player_t;47,831
-typedef struct terrainMap 49,844
-    player_t player;50,872
-    int northSouthExit;51,893
-    int westEastExit;52,917
-    int worldRow;53,939
-    int worldCol;54,957
-    char terrain[terrain55,975
-    position_t roadPositions[roadPositions56,1001
-} terrainMap_t;57,1047
-struct terrainMap *world[world59,1064
-int decorateTerrain(61,1101
-int generateBuildings(77,1501
-int generatePaths(106,2382
-int checkSurroundingsForChar(142,3432
-void generateWater(156,3764
-void generateTallGrass(184,4631
-void generateExits(224,5845
-void placeCharacter(247,6739
-void populateHikerCosts(256,7052
-void populateRivalCosts(289,8226
-void dijkstra(317,9170
-position_t findPath(384,11612
-int positionOccupied(444,13491
-void displayMap(455,13745
-void findPosition(534,16347
-int getMoveCost(589,18880
-int positionNotOccupied(662,20950
-void generateTrainers(674,21245
-struct terrainMap * generateTerrain(1051,45101
-int main(1092,46312
+    int defeated;33,613
+    long int nextMoveTime;34,631
+    char spawn;35,658
+} character_t;36,674
+typedef struct squares 38,690
+    int rowPos;39,715
+    int colPos;40,731
+    int cost;41,747
+    char terrain;42,761
+} squares_t;43,779
+typedef struct player 45,793
+    int rowPos;46,817
+    int colPos;47,833
+} player_t;48,849
+typedef struct terrainMap 50,862
+    player_t player;51,890
+    int northSouthExit;52,911
+    int westEastExit;53,935
+    int worldRow;54,957
+    int worldCol;55,975
+    char terrain[terrain56,993
+    position_t roadPositions[roadPositions57,1019
+} terrainMap_t;58,1065
+struct terrainMap *world[world60,1082
+int decorateTerrain(62,1119
+int generateBuildings(78,1519
+int generatePaths(107,2400
+int checkSurroundingsForChar(143,3450
+void generateWater(157,3782
+void generateTallGrass(185,4649
+void generateExits(225,5863
+void placeCharacter(248,6757
+void populateHikerCosts(257,7070
+void populateRivalCosts(290,8244
+void dijkstra(318,9188
+position_t findPath(385,11630
+int positionOccupied(445,13509
+void displayMap(456,13763
+void findPosition(535,16365
+int getMoveCost(590,18898
+int positionNotOccupied(663,20968
+int notGate(675,21268
+void generateTrainers(686,21591
+struct terrainMap * generateTerrain(1332,63373
+int main(1373,64584

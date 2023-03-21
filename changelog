@@ -14,6 +14,27 @@
         To-Do:
             Implement user actions/movement
             Pokemon battle screen
-    12:27pm-
+3/21/23
+    2:00pm-3:20pm
+        Starting implementing player movement actions
+        To-Do:
+            Fully implement user actions/movement
+            Pokemon battle screen
+            Trainer display screen
+    5:00pm-5:49pm
+        Implemented all player movement options
+        Added ability to enter and exit buildings
+            Player cannot move while inside the building
+            Right now the only thing they can do is exit the building
+        To-Do:
+            Pokemon battle screen
+            Trainer display screen
+    5:50pm-
+        Updated positionNotOccupied to return trainer that is occupying the position
+            Returns it in the form of an index to access the trainers[] array
+            Also adds 10 to this index otherwise the return value of 1 which is meant to indicate the position is not occupied could be possibly returned when the trainer at trainers[1] is occupying the position.
+        Implemented battles
+            Added a defeated property to the trainers
+            
 
             

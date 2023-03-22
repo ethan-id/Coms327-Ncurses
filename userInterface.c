@@ -744,6 +744,8 @@ void generateTrainers(terrainMap_t *terrainMap, int numTrainers) {
     // While the queue of trainers isn't empty, dequeue the trainer with the cheapest next move, make the move, 
     //  then reinsert with old cost + next move cost
     heap_entry u;
+
+    // This is the main game loop
     int dontQuit = 1;
     while(heap_delmin(&characterHeap, &u.key, &u.value) && dontQuit) {
         // move the things

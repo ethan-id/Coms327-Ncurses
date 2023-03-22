@@ -32,7 +32,7 @@ typedef struct heap 18,322
     heap_entry* table;23,655
 } heap;24,727
 
-userInterface.c,1926
+userInterface.c,1900
 #define GRASS_COLOR 10,155
 #define WATER_COLOR 11,179
 #define BOULDER_COLOR 12,203
@@ -96,7 +96,6 @@ void findPosition(534,16325
 int getMoveCost(589,18858
 int positionNotOccupied(662,20928
 int notGate(674,21228
-int movePlayer(685,21551
-void generateTrainers(719,23357
-struct terrainMap * generateTerrain(1192,52646
-int main(1233,53857
+void generateTrainers(685,21551
+struct terrainMap * generateTerrain(1360,66013
+int main(1401,67224

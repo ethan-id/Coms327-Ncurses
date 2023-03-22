@@ -41,7 +41,5 @@
     4:18pm-5:20pm
         Made it so hikers and rivals can't stand on top of the player
         Made it so player can't walk into gates
-    5:20pm-5:29pm
-        Abstracted movePlayer method to remove a bunch of duplicate code with player movements
 
             

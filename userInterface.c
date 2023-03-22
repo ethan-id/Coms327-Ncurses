@@ -682,6 +682,40 @@ int notGate(terrainMap_t *terrainMap, int row, int col) {
     return 1; 
 }
 
+int movePlayer(terrainMap_t *terrainMap, int rowAdj, int colAdj, int numTrainers, character_t *trainers[numTrainers], int i) {
+    mvprintw(0, 0, "%-50s", " ");
+    int moveCost, inBattle;
+    int posNotOcc = positionNotOccupied(trainers[i]->position.rowPos + rowAdj, trainers[i]->position.colPos + colAdj, numTrainers, trainers);
+    if (terrainMap->terrain[trainers[i]->position.rowPos + rowAdj][trainers[i]->position.colPos + colAdj] != '%'
+    && terrainMap->terrain[trainers[i]->position.rowPos + rowAdj][trainers[i]->position.colPos + colAdj] != '^'
+    && terrainMap->terrain[trainers[i]->position.rowPos + rowAdj][trainers[i]->position.colPos + colAdj] != '~'
+    && notGate(terrainMap, trainers[i]->position.rowPos + rowAdj, trainers[i]->position.colPos + colAdj)
+    && posNotOcc == 1) {
+        trainers[i]->position.colPos += colAdj;
+        trainers[i]->position.rowPos += rowAdj;
+        terrainMap->player.rowPos += rowAdj;
+        terrainMap->player.colPos += colAdj;
+        moveCost = getMoveCost(terrainMap, trainers[i]->position.rowPos + rowAdj, trainers[i]->position.colPos + colAdj, trainers[i]);
+    }
+    if (posNotOcc != 1) {
+        if(trainers[posNotOcc - 10]->defeated != 0) {
+            mvprintw(0, 0, "%-50s", "You've already defeated this trainer in battle...");
+        } else {
+            inBattle = 1;
+            while(inBattle) {
+                mvprintw(0, 0, "You entered a battle with %c! Press 'esc' to leave\t\t", trainers[posNotOcc - 10]->npc);                                    int ch = getch();
+                if (ch == 27) {
+                    inBattle = 0;
+                    trainers[posNotOcc - 10]->defeated = 1;
+                }
+                mvprintw(0, 0, "%-50s", "You left the battle.");
+            }
+        }
+    }
+
+    return moveCost;
+}
+
 void generateTrainers(terrainMap_t *terrainMap, int numTrainers) {
     // pick random assortment of trainers, including at least one hiker and one rival
     // unless numTrainers < 2
@@ -751,7 +785,6 @@ void generateTrainers(terrainMap_t *terrainMap, int numTrainers) {
         char *npc;
         char *index;
         long int moveCost = 0;
-        int inBattle = 0;
 
         // Deconstruct Value String
         strcpy(value, u.value);
@@ -769,243 +802,42 @@ void generateTrainers(terrainMap_t *terrainMap, int numTrainers) {
                     case (55) :
                     case (121) :
                         mvprintw(0, 0, "%-50s", " ");
-                        int posNotOcc = positionNotOccupied(trainers[i]->position.rowPos - 1, trainers[i]->position.colPos - 1, numTrainers, trainers);
-                        if (terrainMap->terrain[trainers[i]->position.rowPos - 1][trainers[i]->position.colPos - 1] != '%'
-                        && terrainMap->terrain[trainers[i]->position.rowPos - 1][trainers[i]->position.colPos - 1] != '^'
-                        && terrainMap->terrain[trainers[i]->position.rowPos - 1][trainers[i]->position.colPos - 1] != '~'
-                        && notGate(terrainMap, trainers[i]->position.rowPos - 1, trainers[i]->position.colPos - 1)
-                        && posNotOcc == 1) {
-                            trainers[i]->position.colPos--;
-                            trainers[i]->position.rowPos--;
-                            terrainMap->player.rowPos--;
-                            terrainMap->player.colPos--;                
-                            moveCost = getMoveCost(terrainMap, trainers[i]->position.rowPos, trainers[i]->position.colPos - 1, trainers[i]);
-                        }
-                        if (posNotOcc != 1) {
-                            if(trainers[posNotOcc - 10]->defeated != 0) {
-                                mvprintw(0, 0, "%-50s", "You've already defeated this trainer in battle...");
-                            } else {
-                                inBattle = 1;
-                                while(inBattle) {
-                                    mvprintw(0, 0, "You entered a battle with %c! Press 'esc' to leave\t\t", trainers[posNotOcc - 10]->npc);                                    int ch = getch();
-                                    if (ch == 27) {
-                                        inBattle = 0;
-                                        trainers[posNotOcc - 10]->defeated = 1;
-                                    }
-                                    mvprintw(0, 0, "%-50s", "You left the battle.");
-                                }
-                            }
-                        }
+                        moveCost = movePlayer(terrainMap, -1, -1, numTrainers, trainers, i);
                         break;
                     case (56) :
                     case (107) :
                         mvprintw(0, 0, "%-50s", " ");
-                        posNotOcc = positionNotOccupied(trainers[i]->position.rowPos - 1, trainers[i]->position.colPos, numTrainers, trainers);
-                        if (terrainMap->terrain[trainers[i]->position.rowPos - 1][trainers[i]->position.colPos] != '%'
-                        && terrainMap->terrain[trainers[i]->position.rowPos - 1][trainers[i]->position.colPos] != '^'
-                        && terrainMap->terrain[trainers[i]->position.rowPos - 1][trainers[i]->position.colPos] != '~'
-                        && notGate(terrainMap, trainers[i]->position.rowPos - 1, trainers[i]->position.colPos)
-                        && posNotOcc == 1) {
-                            trainers[i]->position.rowPos--;
-                            terrainMap->player.rowPos--;
-                            moveCost = getMoveCost(terrainMap, trainers[i]->position.rowPos - 1, trainers[i]->position.colPos, trainers[i]);
-                        }
-                        if (posNotOcc != 1) {
-                            if(trainers[posNotOcc - 10]->defeated != 0) {
-                                mvprintw(0, 0, "%-50s", "You've already defeated this trainer in battle...");
-                            } else {
-                                inBattle = 1;
-                                while(inBattle) {
-                                    mvprintw(0, 0, "You entered a battle with %c! Press 'esc' to leave\t\t", trainers[posNotOcc - 10]->npc);                                    mvprintw(0, 0, "You entered a battle with %c! Press 'esc' to leave\t\t", trainers[posNotOcc - 10]->npc);
-                                    int ch = getch();
-                                    if (ch == 27) {
-                                        inBattle = 0;
-                                        trainers[posNotOcc - 10]->defeated = 1;
-                                    }
-                                    mvprintw(0, 0, "%-50s", "You left the battle.");
-                                }
-                            }
-                        }
+                        moveCost = movePlayer(terrainMap, -1, 0, numTrainers, trainers, i);
                         break;
                     case (57) :
                     case (117) :
                         mvprintw(0, 0, "%-50s", " ");
-                        posNotOcc = positionNotOccupied(trainers[i]->position.rowPos - 1, trainers[i]->position.colPos + 1, numTrainers, trainers);
-                        if (terrainMap->terrain[trainers[i]->position.rowPos - 1][trainers[i]->position.colPos + 1] != '%'
-                        && terrainMap->terrain[trainers[i]->position.rowPos - 1][trainers[i]->position.colPos + 1] != '^'
-                        && terrainMap->terrain[trainers[i]->position.rowPos - 1][trainers[i]->position.colPos + 1] != '~'
-                        && notGate(terrainMap, trainers[i]->position.rowPos - 1, trainers[i]->position.colPos + 1)
-                        && posNotOcc == 1) {
-                            trainers[i]->position.rowPos--;
-                            trainers[i]->position.colPos++;
-                            terrainMap->player.rowPos--;
-                            terrainMap->player.colPos++;
-                            moveCost = getMoveCost(terrainMap, trainers[i]->position.rowPos - 1, trainers[i]->position.colPos + 1, trainers[i]);
-                        }
-                        if (posNotOcc != 1) {
-                            if(trainers[posNotOcc - 10]->defeated != 0) {
-                                mvprintw(0, 0, "%-50s", "You've already defeated this trainer in battle...");
-                            } else {
-                                inBattle = 1;
-                                while(inBattle) {
-                                    mvprintw(0, 0, "You entered a battle with %c! Press 'esc' to leave\t\t", trainers[posNotOcc - 10]->npc);                                    int ch = getch();
-                                    if (ch == 27) {
-                                        inBattle = 0;
-                                        trainers[posNotOcc - 10]->defeated = 1;
-                                    }
-                                    mvprintw(0, 0, "%-50s", "You left the battle.");
-                                }
-                            }
-                        }
+                        moveCost = movePlayer(terrainMap, -1, 1, numTrainers, trainers, i);
                         break;
                     case (54) :
                     case (108) :
                         mvprintw(0, 0, "%-50s", " ");
-                        posNotOcc = positionNotOccupied(trainers[i]->position.rowPos, trainers[i]->position.colPos + 1, numTrainers, trainers);
-                        if (terrainMap->terrain[trainers[i]->position.rowPos][trainers[i]->position.colPos + 1] != '%'
-                        && terrainMap->terrain[trainers[i]->position.rowPos][trainers[i]->position.colPos + 1] != '^'
-                        && terrainMap->terrain[trainers[i]->position.rowPos][trainers[i]->position.colPos + 1] != '~'
-                        && notGate(terrainMap, trainers[i]->position.rowPos, trainers[i]->position.colPos + 1)
-                        && posNotOcc == 1) {
-                            trainers[i]->position.colPos++;
-                            terrainMap->player.colPos++;
-                            moveCost = getMoveCost(terrainMap, trainers[i]->position.rowPos, trainers[i]->position.colPos + 1, trainers[i]);
-                        }
-                        if (posNotOcc != 1) {
-                            if(trainers[posNotOcc - 10]->defeated != 0) {
-                                mvprintw(0, 0, "%-50s", "You've already defeated this trainer in battle...");
-                            } else {
-                                inBattle = 1;
-                                while(inBattle) {
-                                    mvprintw(0, 0, "You entered a battle with %c! Press 'esc' to leave\t\t", trainers[posNotOcc - 10]->npc);                                    int ch = getch();
-                                    if (ch == 27) {
-                                        inBattle = 0;
-                                        trainers[posNotOcc - 10]->defeated = 1;
-                                    }
-                                    mvprintw(0, 0, "%-50s", "You left the battle.");
-                                }
-                            }
-                        }
+                        moveCost = movePlayer(terrainMap, 0, 1, numTrainers, trainers, i);
                         break;
                     case (51) :
                     case (110) :
                         mvprintw(0, 0, "%-50s", " ");
-                        posNotOcc = positionNotOccupied(trainers[i]->position.rowPos + 1, trainers[i]->position.colPos + 1, numTrainers, trainers);
-                        if (terrainMap->terrain[trainers[i]->position.rowPos + 1][trainers[i]->position.colPos + 1] != '%'
-                        && terrainMap->terrain[trainers[i]->position.rowPos + 1][trainers[i]->position.colPos + 1] != '^'
-                        && terrainMap->terrain[trainers[i]->position.rowPos + 1][trainers[i]->position.colPos + 1] != '~'
-                        && notGate(terrainMap, trainers[i]->position.rowPos + 1, trainers[i]->position.colPos + 1)
-                        && posNotOcc == 1) {
-                            trainers[i]->position.colPos++;
-                            trainers[i]->position.rowPos++;
-                            terrainMap->player.colPos++;
-                            terrainMap->player.rowPos++;
-                            moveCost = getMoveCost(terrainMap, trainers[i]->position.rowPos + 1, trainers[i]->position.colPos + 1, trainers[i]);
-                        }
-                        if (posNotOcc != 1) {
-                            if(trainers[posNotOcc - 10]->defeated != 0) {
-                                mvprintw(0, 0, "%-50s", "You've already defeated this trainer in battle...");
-                            } else {
-                                inBattle = 1;
-                                while(inBattle) {
-                                    mvprintw(0, 0, "You entered a battle with %c! Press 'esc' to leave\t\t", trainers[posNotOcc - 10]->npc);                                    int ch = getch();
-                                    if (ch == 27) {
-                                        inBattle = 0;
-                                        trainers[posNotOcc - 10]->defeated = 1;
-                                    }
-                                    mvprintw(0, 0, "%-50s", "You left the battle.");
-                                }
-                            }
-                        }
+                        moveCost = movePlayer(terrainMap, 1, 1, numTrainers, trainers, i);
                         break;
                     case (50) :
                     case (106) :
                         mvprintw(0, 0, "%-50s", " ");
-                        posNotOcc = positionNotOccupied(trainers[i]->position.rowPos + 1, trainers[i]->position.colPos, numTrainers, trainers);
-                        if (terrainMap->terrain[trainers[i]->position.rowPos + 1][trainers[i]->position.colPos] != '%'
-                        && terrainMap->terrain[trainers[i]->position.rowPos + 1][trainers[i]->position.colPos] != '^'
-                        && terrainMap->terrain[trainers[i]->position.rowPos + 1][trainers[i]->position.colPos] != '~'
-                        && notGate(terrainMap, trainers[i]->position.rowPos + 1, trainers[i]->position.colPos)
-                        && posNotOcc == 1) {
-                            trainers[i]->position.rowPos++;
-                            terrainMap->player.rowPos++;
-                            moveCost = getMoveCost(terrainMap, trainers[i]->position.rowPos + 1, trainers[i]->position.colPos, trainers[i]);
-                        }
-                        if (posNotOcc != 1) {
-                            if(trainers[posNotOcc - 10]->defeated != 0) {
-                                mvprintw(0, 0, "%-50s", "You've already defeated this trainer in battle...");
-                            } else {
-                                inBattle = 1;
-                                while(inBattle) {
-                                    mvprintw(0, 0, "You entered a battle with %c! Press 'esc' to leave\t\t", trainers[posNotOcc - 10]->npc);                                    int ch = getch();
-                                    if (ch == 27) {
-                                        inBattle = 0;
-                                        trainers[posNotOcc - 10]->defeated = 1;
-                                    }
-                                    mvprintw(0, 0, "%-50s", "You left the battle.");
-                                }
-                            }
-                        }
+                        moveCost = movePlayer(terrainMap, 1, 0, numTrainers, trainers, i);
                         break;
                     case (49) :
                     case (98) :
                         mvprintw(0, 0, "%-50s", " ");
-                        posNotOcc = positionNotOccupied(trainers[i]->position.rowPos + 1, trainers[i]->position.colPos - 1, numTrainers, trainers);
-                        if (terrainMap->terrain[trainers[i]->position.rowPos + 1][trainers[i]->position.colPos - 1] != '%'
-                        && terrainMap->terrain[trainers[i]->position.rowPos + 1][trainers[i]->position.colPos - 1] != '^'
-                        && terrainMap->terrain[trainers[i]->position.rowPos + 1][trainers[i]->position.colPos - 1] != '~'
-                        && notGate(terrainMap, trainers[i]->position.rowPos + 1, trainers[i]->position.colPos - 1)
-                        && posNotOcc == 1) {
-                            trainers[i]->position.colPos--;
-                            trainers[i]->position.rowPos++;
-                            terrainMap->player.colPos--;
-                            terrainMap->player.rowPos++;
-                            moveCost = getMoveCost(terrainMap, trainers[i]->position.rowPos + 1, trainers[i]->position.colPos - 1, trainers[i]);
-                        }
-                        if (posNotOcc != 1) {
-                            if(trainers[posNotOcc - 10]->defeated != 0) {
-                                mvprintw(0, 0, "%-50s", "You've already defeated this trainer in battle...");
-                            } else {
-                                inBattle = 1;
-                                while(inBattle) {
-                                    mvprintw(0, 0, "You entered a battle with %c! Press 'esc' to leave\t\t", trainers[posNotOcc - 10]->npc);                                    int ch = getch();
-                                    if (ch == 27) {
-                                        inBattle = 0;
-                                        trainers[posNotOcc - 10]->defeated = 1;
-                                    }
-                                    mvprintw(0, 0, "%-50s", "You left the battle.");
-                                }
-                            }
-                        }
+                        moveCost = movePlayer(terrainMap, 1, -1, numTrainers, trainers, i);
                         break;
                     case (52) :
                     case (104) :
                         mvprintw(0, 0, "%-50s", " ");
-                        posNotOcc = positionNotOccupied(trainers[i]->position.rowPos, trainers[i]->position.colPos - 1, numTrainers, trainers);
-                        if (terrainMap->terrain[trainers[i]->position.rowPos][trainers[i]->position.colPos - 1] != '%'
-                        && terrainMap->terrain[trainers[i]->position.rowPos][trainers[i]->position.colPos - 1] != '^'
-                        && terrainMap->terrain[trainers[i]->position.rowPos][trainers[i]->position.colPos - 1] != '~'
-                        && notGate(terrainMap, trainers[i]->position.rowPos, trainers[i]->position.colPos - 1)
-                        && posNotOcc == 1) {
-                            trainers[i]->position.colPos--;
-                            terrainMap->player.colPos--;
-                            moveCost = getMoveCost(terrainMap, trainers[i]->position.rowPos, trainers[i]->position.colPos - 1, trainers[i]);
-                        }
-                        if (posNotOcc != 1) {
-                            if(trainers[posNotOcc - 10]->defeated != 0) {
-                                mvprintw(0, 0, "%-50s", "You've already defeated this trainer in battle...");
-                            } else {
-                                inBattle = 1;
-                                while(inBattle) {
-                                    mvprintw(0, 0, "You entered a battle with %c! Press 'esc' to leave\t\t", trainers[posNotOcc - 10]->npc);                                    int ch = getch();
-                                    if (ch == 27) {
-                                        inBattle = 0;
-                                        trainers[posNotOcc - 10]->defeated = 1;
-                                    }
-                                    mvprintw(0, 0, "%-50s", "You left the battle.");
-                                }
-                            }
-                        }
+                        moveCost = movePlayer(terrainMap, 0, -1, numTrainers, trainers, i);
                         break;
                     case (53) :
                     case (32) :

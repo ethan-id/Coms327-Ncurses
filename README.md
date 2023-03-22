@@ -7,7 +7,9 @@ Ethan Hancock, ehancock@iastate.edu
 
 ### Description:
 #### Changes:
- - generateTrainers() updates
+ - generateTrainers() updated to handle player movements and other user actions.
 
 #### Methods Added
- - notGate()
+ - notGate(): Method for player movement verification, returns true if a position is not a gate.
+ - movePlayer(): Method that moves the player given an adjustment to their row position and column position as parameters.
+

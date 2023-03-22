@@ -7,7 +7,7 @@ Ethan Hancock, ehancock@iastate.edu
 
 ### Description:
 #### Changes:
- - 
+ - generateTrainers() updates
 
 #### Methods Added
- - 
+ - notGate()

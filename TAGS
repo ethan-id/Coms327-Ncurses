@@ -83,19 +83,19 @@ int generateBuildings(78,1519
 int generatePaths(107,2400
 int checkSurroundingsForChar(143,3450
 void generateWater(157,3782
-void generateTallGrass(185,4649
-void generateExits(225,5863
-void placeCharacter(248,6757
-void populateHikerCosts(257,7070
-void populateRivalCosts(290,8244
-void dijkstra(318,9188
-position_t findPath(385,11630
-int positionOccupied(445,13509
-void displayMap(456,13763
-void findPosition(535,16404
-int getMoveCost(590,18937
-int positionNotOccupied(663,21007
-int notGate(675,21307
-void generateTrainers(686,21630
-struct terrainMap * generateTerrain(1365,65954
-int main(1406,67165
+void generateTallGrass(184,4570
+void generateExits(224,5784
+void placeCharacter(247,6678
+void populateHikerCosts(256,6991
+void populateRivalCosts(289,8165
+void dijkstra(317,9109
+position_t findPath(384,11551
+int positionOccupied(444,13430
+void displayMap(455,13684
+void findPosition(534,16325
+int getMoveCost(589,18858
+int positionNotOccupied(662,20928
+int notGate(674,21228
+void generateTrainers(685,21551
+struct terrainMap * generateTerrain(1360,66013
+int main(1401,67224

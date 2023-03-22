@@ -92,10 +92,10 @@ void dijkstra(318,9188
 position_t findPath(385,11630
 int positionOccupied(445,13509
 void displayMap(456,13763
-void findPosition(535,16365
-int getMoveCost(590,18898
-int positionNotOccupied(663,20968
-int notGate(675,21268
-void generateTrainers(686,21591
-struct terrainMap * generateTerrain(1332,63373
-int main(1373,64584
+void findPosition(535,16404
+int getMoveCost(590,18937
+int positionNotOccupied(663,21007
+int notGate(675,21307
+void generateTrainers(686,21630
+struct terrainMap * generateTerrain(1365,65954
+int main(1406,67165

@@ -29,12 +29,17 @@
         To-Do:
             Pokemon battle screen
             Trainer display screen
-    5:50pm-
+    5:50pm-6:40pm
         Updated positionNotOccupied to return trainer that is occupying the position
             Returns it in the form of an index to access the trainers[] array
             Also adds 10 to this index otherwise the return value of 1 which is meant to indicate the position is not occupied could be possibly returned when the trainer at trainers[1] is occupying the position.
         Implemented battles
             Added a defeated property to the trainers
-            
+3/22/23
+    2:50pm-4:17pm
+        Added trainer list display and controls      
+    4:18pm-
+        Made it so hikers and rivals can't stand on top of the player
+        Made it so player can't walk into gates
 
             
